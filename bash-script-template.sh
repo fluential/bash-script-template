@@ -18,8 +18,8 @@ set -euo pipefail
 # http://mywiki.wooledge.org/BashFAQ/004
 shopt -s nullglob dotglob
 
-# Provide an option to override values via third party env variables
-VAR=${_VAR-"default_value"}
+# Provide an option to override values via env variables
+: ${VAR:="default_value"}
 
 progname=$(basename $0)
 
