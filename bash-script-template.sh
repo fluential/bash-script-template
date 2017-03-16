@@ -18,17 +18,24 @@ set -euo pipefail
 # http://mywiki.wooledge.org/BashFAQ/004
 shopt -s nullglob dotglob
 
+PROGNAME=$(basename $0)
+
 # Provide an option to override values via env variables
 : ${VAR:="default_value"}
-
-progname=$(basename $0)
+: ${LOCK_FD:="200"}
+: ${LOCK_FILE:="/var/lock/${PROGNAME}.lock"}
 
 err() {
-  echo "[$(date +'%Y-%m-%dT%H:%M:%S%z')] ($progname): ERROR: $@" >&2
+  echo "[$(date +'%Y-%m-%dT%H:%M:%S%z')] ($PROGNAME): ERROR: $@" >&2
 }
 
 status() {
-  echo "[$(date +'%Y-%m-%dT%H:%M:%S%z')] ($progname): $@"
+  echo "[$(date +'%Y-%m-%dT%H:%M:%S%z')] ($PROGNAME): $@"
+}
+
+lock() {
+  eval "exec $LOCK_FD>$LOCK_FILE"
+  flock -n $LOCK_FD || ( err "Cannot aquire lock on ${LOCK_FILE}" ; exit 1; )
 }
 
 cleanup() {
@@ -67,10 +74,12 @@ fi
 while getopts ":bc" opt; do
   case "$opt" in
     b)
+      lock
       status '-b invoked'
       shift
     ;;
     c)
+      lock
       status '-c option invoked'
       shift
     ;;
