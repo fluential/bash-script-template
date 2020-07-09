@@ -1,3 +1,4 @@
+[![HitCount](http://hits.dwyl.com/fluential/bash-script-template.svg)](http://hits.dwyl.com/fluential/bash-script-template)
 # bash-script-template
 A bash script template / boilerplate to start your script with.
 
