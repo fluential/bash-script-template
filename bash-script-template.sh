@@ -65,7 +65,7 @@ EOL
 exit 1
 }
 
-trap finish SIGHUP SIGINT SIGQUIT SIGTERM ERR
+trap finish EXIT HUP TERM INT SIGHUP SIGINT SIGQUIT SIGTERM ERR
 
 if [ "$#" -lt 1 ]; then
   usage
